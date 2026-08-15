@@ -1,0 +1,17 @@
+{
+  "code": "gender",
+  "display_name": "Gender",
+  "is_hierarchical": false,
+  "values": [
+    {
+      "code": "FEMALE",
+      "display_name": "Female",
+      "sort_order": 1
+    },
+    {
+      "code": "MALE",
+      "display_name": "Male",
+      "sort_order": 2
+    }
+  ]
+}

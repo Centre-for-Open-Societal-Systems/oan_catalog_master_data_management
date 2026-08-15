@@ -1,0 +1,136 @@
+name: openg2p-catalogue
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${CATALOGUE_DB:-catalogue}
+      POSTGRES_USER: ${CATALOGUE_DB_USER:-catalogue}
+      POSTGRES_PASSWORD: ${CATALOGUE_DB_PASSWORD:-catalogue}
+    ports:
+      - "${CATALOGUE_DB_PORT:-55432}:5432"
+    volumes:
+      - catalogue-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${CATALOGUE_DB_USER:-catalogue} -d ${CATALOGUE_DB:-catalogue}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  migrate:
+    image: openg2p-catalogue-migrate:local
+    build:
+      context: .
+      dockerfile: docker/db-migration/Dockerfile
+    environment: &database-environment
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: ${CATALOGUE_DB:-catalogue}
+      PGUSER: ${CATALOGUE_DB_USER:-catalogue}
+      PGPASSWORD: ${CATALOGUE_DB_PASSWORD:-catalogue}
+    command: ["--expected-version", "014"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  seed:
+    image: openg2p-catalogue-seed:local
+    build:
+      context: .
+      dockerfile: docker/db-seed/Dockerfile.sql
+    environment: *database-environment
+    command:
+      - --manifest
+      - /seed/sql/manifest.yaml
+      - --expected-country
+      - ${CATALOGUE_COUNTRY_CODE:-ETH}
+      - --trigger
+      - MANUAL
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    image: openg2p-catalogue-api:local
+    build:
+      context: .
+      dockerfile: docker/catalogue-api/Dockerfile
+    environment:
+      CATALOGUE_API_DEV_MODE: "true"
+      HOME: /tmp
+      CATALOGUE_API_DB_HOSTNAME: postgres
+      CATALOGUE_API_DB_PORT: "5432"
+      CATALOGUE_API_DB_DBNAME: ${CATALOGUE_DB:-catalogue}
+      CATALOGUE_API_DB_USERNAME: ${CATALOGUE_DB_USER:-catalogue}
+      CATALOGUE_API_DB_PASSWORD: ${CATALOGUE_DB_PASSWORD:-catalogue}
+      CATALOGUE_API_DEFAULT_COUNTRY_CODE: ${CATALOGUE_COUNTRY_CODE:-ETH}
+      CATALOGUE_API_EXPECTED_SCHEMA_VERSION: "014"
+      CATALOGUE_API_NO_OF_WORKERS: "1"
+      PROMETHEUS_MULTIPROC_DIR: /tmp/prometheus
+    command:
+      - gunicorn
+      - openg2p_catalogue_service.dev_main:app
+      - --workers
+      - "1"
+      - --worker-class
+      - uvicorn.workers.UvicornWorker
+      - --bind
+      - 0.0.0.0:8000
+    ports:
+      - "${CATALOGUE_API_PORT:-8000}:8000"
+    tmpfs:
+      - /tmp/prometheus:mode=770,uid=10001,gid=10001
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    restart: unless-stopped
+
+  mock-iam:
+    profiles: ["smoke"]
+    image: openg2p-catalogue-consumer-smoke:local
+    build:
+      context: .
+      dockerfile: docker/consumer-smoke/Dockerfile
+    command: ["python", "/app/mock_iam.py"]
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8080/health', timeout=3)"
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    restart: "no"
+
+  consumer-smoke:
+    profiles: ["smoke"]
+    image: openg2p-catalogue-consumer-smoke:local
+    build:
+      context: .
+      dockerfile: docker/consumer-smoke/Dockerfile
+    environment:
+      CATALOGUE_SERVICE_URL: http://api:8000
+      IAM_TOKEN_URL: http://mock-iam:8080/token
+      CATALOGUE_COUNTRY_CODE: ${CATALOGUE_COUNTRY_CODE:-ETH}
+    depends_on:
+      api:
+        condition: service_healthy
+      mock-iam:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  catalogue-postgres:

@@ -1,0 +1,132 @@
+{{- if .Values.catalogueAPI.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "catalogue.apiName" . }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.catalogueAPI.autoscaling.enabled }}
+  replicas: {{ .Values.catalogueAPI.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "catalogue.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "catalogue.selectorLabels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      serviceAccountName: {{ include "catalogue.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.catalogueAPI.podSecurityContext | nindent 8 }}
+      initContainers:
+        {{- if .Values.schemaMigration.enabled }}
+        - name: verify-schema
+          image: {{ printf "%s:%s" .Values.schemaMigration.image.repository .Values.schemaMigration.image.tag | quote }}
+          imagePullPolicy: {{ .Values.schemaMigration.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.catalogueAPI.containerSecurityContext | nindent 12 }}
+          args:
+            - --migrations
+            - /migration/sql
+            - --expected-version
+            - {{ .Values.schemaMigration.expectedVersion | quote }}
+            - --verify-only
+            - --wait-seconds
+            - {{ .Values.schemaMigration.waitSeconds | quote }}
+          env:
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.catalogueDBPort | quote }}
+            - name: PGDATABASE
+              value: {{ tpl .Values.global.catalogueDB $ | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.catalogueDBUser $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.catalogueDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.catalogueDBUserPasswordKey $ | quote }}
+        {{- else }}
+        - name: wait-for-postgres
+          image: {{ .Values.catalogueAPI.waitImage }}
+          securityContext:
+            {{- toYaml .Values.catalogueAPI.containerSecurityContext | nindent 12 }}
+          command: ["sh", "-c"]
+          args:
+            - until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE"; do sleep 3; done
+          env:
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.catalogueDBPort | quote }}
+            - name: PGDATABASE
+              value: {{ tpl .Values.global.catalogueDB $ | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.catalogueDBUser $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.catalogueDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.catalogueDBUserPasswordKey $ | quote }}
+        {{- end }}
+      containers:
+        - name: catalogue-api
+          image: {{ printf "%s:%s" .Values.catalogueAPI.image.repository .Values.catalogueAPI.image.tag | quote }}
+          imagePullPolicy: {{ .Values.catalogueAPI.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.catalogueAPI.containerSecurityContext | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.catalogueAPI.containerPort }}
+          env:
+            - name: CATALOGUE_API_DB_HOSTNAME
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: CATALOGUE_API_DB_PORT
+              value: {{ .Values.global.catalogueDBPort | quote }}
+            - name: CATALOGUE_API_DB_DBNAME
+              value: {{ tpl .Values.global.catalogueDB $ | quote }}
+            - name: CATALOGUE_API_DB_USERNAME
+              value: {{ tpl .Values.global.catalogueDBUser $ | quote }}
+            - name: CATALOGUE_API_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.catalogueDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.catalogueDBUserPasswordKey $ | quote }}
+            - name: CATALOGUE_API_DEFAULT_COUNTRY_CODE
+              value: {{ .Values.global.catalogueCountryCode | quote }}
+            - name: CATALOGUE_API_EXPECTED_SCHEMA_VERSION
+              value: {{ .Values.schemaMigration.expectedVersion | quote }}
+            - name: CATALOGUE_API_READINESS_TIMEOUT_SECONDS
+              value: {{ .Values.catalogueAPI.probes.readinessTimeoutSeconds | quote }}
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: /tmp/prometheus
+            - name: COMMON_KEYCLOAK_CLIENT_ID
+              value: {{ tpl .Values.global.authClientId $ | quote }}
+            - name: COMMON_AUTH_PROVIDER_API_URL
+              value: {{ tpl .Values.global.authProviderApiUrl $ | quote }}
+          startupProbe:
+            httpGet: {path: /ping, port: http}
+            {{- toYaml .Values.catalogueAPI.probes.startup | nindent 12 }}
+          readinessProbe:
+            httpGet: {path: /health/ready, port: http}
+            {{- toYaml .Values.catalogueAPI.probes.readiness | nindent 12 }}
+          livenessProbe:
+            httpGet: {path: /health/live, port: http}
+            {{- toYaml .Values.catalogueAPI.probes.liveness | nindent 12 }}
+          resources:
+            {{- toYaml .Values.catalogueAPI.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: prometheus-multiprocess
+              mountPath: /tmp/prometheus
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: prometheus-multiprocess
+          emptyDir: {}
+{{- end }}

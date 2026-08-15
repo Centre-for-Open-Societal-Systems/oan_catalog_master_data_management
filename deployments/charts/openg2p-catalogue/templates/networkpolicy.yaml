@@ -1,0 +1,77 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- if .Values.catalogueAPI.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ printf "%s-api" (include "catalogue.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "catalogue.selectorLabels" . | nindent 6 }}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector: {}
+        {{- range .Values.networkPolicy.ingressNamespaces }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ . | quote }}
+        {{- end }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.catalogueAPI.containerPort }}
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+    - to:
+        - podSelector: {}
+      ports:
+        - {protocol: TCP, port: {{ .Values.global.catalogueDBPort }}}
+        - {protocol: TCP, port: 80}
+        - {protocol: TCP, port: 8080}
+    {{- if .Values.networkPolicy.allowExternalHttpsEgress }}
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - {protocol: TCP, port: 443}
+    {{- end }}
+---
+{{- end }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ printf "%s-jobs" (include "catalogue.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - {{ printf "%s-migration" (include "catalogue.fullname" .) | trunc 63 }}
+          - {{ printf "%s-sql-seed" (include "catalogue.fullname" .) | trunc 63 }}
+          - {{ printf "%s-seed" (include "catalogue.fullname" .) | trunc 63 }}
+  policyTypes: [Ingress, Egress]
+  ingress: []
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+    - to:
+        - podSelector: {}
+      ports:
+        - {protocol: TCP, port: {{ .Values.global.catalogueDBPort }}}
+{{- end }}

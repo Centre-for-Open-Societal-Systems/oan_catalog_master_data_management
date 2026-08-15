@@ -1,0 +1,30 @@
+{
+  "format_version": 1,
+  "method_counts": {
+    "EXACT_NAME_AND_CROP": 308,
+    "EXACT_SOURCE_ID": 1,
+    "UNRESOLVED": 593
+  },
+  "reason_counts": {
+    "EXACT_TYPE_NAME": 160,
+    "EXACT_TYPE_NAME;SOURCE_ID_NAMESPACE_DISAGREES": 115,
+    "NO_CROP_TYPE_MATCH": 17,
+    "NO_EXACT_VARIETY_NAME_MATCH": 356,
+    "NO_EXACT_VARIETY_NAME_MATCH;SOURCE_ID_NOT_COMPATIBLE_WITH_CROP_AND_NAME": 220,
+    "REVIEWED_TYPE_ALIAS": 19,
+    "REVIEWED_TYPE_ALIAS;SOURCE_ID_NAMESPACE_DISAGREES": 15
+  },
+  "reviewed_type_aliases": {
+    "4": "barley",
+    "5": "barley",
+    "25": "haricot-bean",
+    "40": "potato",
+    "50": "pepper",
+    "115": "lima-bean-butter-bean"
+  },
+  "source_rows": 902,
+  "status_counts": {
+    "MATCHED": 309,
+    "UNRESOLVED": 593
+  }
+}

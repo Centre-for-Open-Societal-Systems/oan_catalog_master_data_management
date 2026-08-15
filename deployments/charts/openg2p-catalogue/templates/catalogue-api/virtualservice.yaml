@@ -1,0 +1,24 @@
+{{- if and .Values.catalogueAPI.enabled .Values.catalogueAPI.istio.enabled .Values.catalogueAPI.istio.virtualservice.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "catalogue.apiName" . }}
+spec:
+  hosts:
+    - {{ tpl .Values.global.catalogueHostname $ | quote }}
+  gateways:
+    - {{ .Values.catalogueAPI.istio.gateway.name | quote }}
+  http:
+    # Metrics are available to in-cluster ServiceMonitors but are not exposed
+    # through the registry-facing Istio hostname.
+    - match:
+        - uri:
+            exact: /metrics
+      directResponse:
+        status: 404
+    - route:
+        - destination:
+            host: {{ include "catalogue.apiName" . }}
+            port:
+              number: {{ .Values.catalogueAPI.service.port }}
+{{- end }}

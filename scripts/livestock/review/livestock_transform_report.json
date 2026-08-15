@@ -1,0 +1,28 @@
+{
+  "dataset_counts": {
+    "livestock_body_condition": 5,
+    "livestock_breed": 94,
+    "livestock_catalog": 5,
+    "livestock_gender": 4,
+    "livestock_location_type": 3,
+    "livestock_population": 40,
+    "livestock_production_type": 13,
+    "livestock_production_type_species": 34,
+    "livestock_record_status": 6,
+    "livestock_registry_entry": 12
+  },
+  "registry_policy": "PUBLISHED_AS_RELEASE_SCOPED_REGISTRY_SNAPSHOT",
+  "source_sha256": {
+    "02_insert_livestock_catalog.sql": "d79ac1d2ff564ced39d42571f9d5553634255a48e9a48463fc016af401fe24f8",
+    "03_insert_livestock_population.sql": "d87cc0219b61e653a6c9c43e4da40b9eeb3c68893a9bf60be2f14f7c694fd806",
+    "04_insert_livestock_breed.sql": "780a0fde286994e13062a66ea61a045abb27ca41d0ecc50a826eaf39ca28ee9e",
+    "05_insert_livestock_reference.sql": "6419165131c93bff958f168d211c078b6b847df5e79379a390f4433a5beb8bcc",
+    "06_insert_livestock_registry.sql": "dddc4be6e335f0dc257c1541c1eca655518feb709ab5ea6888ab22e5ba39cc7f"
+  },
+  "validation_counts": {
+    "breed_outside_national_standard": 5,
+    "breed_species_mismatch": 1,
+    "breed_unrecognised": 2,
+    "production_type_species_mismatch": 3
+  }
+}

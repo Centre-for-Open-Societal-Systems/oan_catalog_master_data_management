@@ -1,0 +1,61 @@
+stages:
+  - test
+  - build
+
+python-checks:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install build twine pytest pytest-asyncio pytest-timeout httpx pydantic prometheus-client PyYAML psycopg2-binary
+    - python -m compileall -q catalogue-api/src catalogue-client/src docker/db-seed docker/db-migration examples
+    - pytest -q tests/unit --junitxml=unit-junit.xml
+    - python -m build catalogue-client --outdir dist/client
+    - twine check dist/client/*
+    - pip install --force-reinstall dist/client/*.whl
+    - python -c "from openg2p_catalogue_client import CatalogueClient, CropVarietyDetailResponse"
+  artifacts:
+    when: always
+    reports:
+      junit: unit-junit.xml
+
+api-integration:
+  stage: test
+  image: python:3.12
+  services:
+    - name: postgres:16-alpine
+      alias: postgres
+  variables:
+    POSTGRES_DB: catalogue_test
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+    CATALOGUE_TEST_DB_DSN: postgresql://postgres:password@postgres:5432/catalogue_test
+  script:
+    - pip install pytest pytest-timeout httpx PyYAML psycopg2-binary asyncpg fastapi fastapi-cache2 sqlalchemy pydantic-settings
+    - pip install "git+https://github.com/openg2p/openg2p-fastapi-common@develop#subdirectory=openg2p-fastapi-common"
+    - pip install --no-deps -e catalogue-api
+    - pytest -q tests/integration --junitxml=integration-junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: integration-junit.xml
+
+catalogue-api-image:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  script:
+    - docker build -f docker/catalogue-api/Dockerfile -t "$CI_REGISTRY_IMAGE/catalogue-api:$CI_COMMIT_REF_SLUG" .
+
+catalogue-seed-image:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  script:
+    - docker build -f docker/db-seed/Dockerfile.sql -t "$CI_REGISTRY_IMAGE/catalogue-db-seed:$CI_COMMIT_REF_SLUG" .
+
+catalogue-migration-image:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  script:
+    - docker build -f docker/db-migration/Dockerfile -t "$CI_REGISTRY_IMAGE/catalogue-db-migration:$CI_COMMIT_REF_SLUG" .

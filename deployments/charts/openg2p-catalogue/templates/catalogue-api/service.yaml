@@ -1,0 +1,37 @@
+{{- if .Values.catalogueAPI.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "catalogue.apiName" . }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.catalogueAPI.service.type }}
+  selector:
+    {{- include "catalogue.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.catalogueAPI.service.port }}
+      targetPort: http
+{{- $discoveryName := default "catalogue-api" .Values.catalogueAPI.service.discovery.name }}
+{{- if and .Values.catalogueAPI.service.discovery.enabled (ne $discoveryName (include "catalogue.apiName" .)) }}
+---
+# Stable service-discovery alias for platform consumers. This intentionally
+# selects the same API pods as the release-scoped Service above.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $discoveryName }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+    app.kubernetes.io/component: service-discovery
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "catalogue.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.catalogueAPI.service.port }}
+      targetPort: http
+{{- end }}
+{{- end }}

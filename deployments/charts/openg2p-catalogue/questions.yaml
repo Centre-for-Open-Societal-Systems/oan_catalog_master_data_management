@@ -1,0 +1,70 @@
+questions:
+  - variable: schemaMigration.enabled
+    label: Run schema migrations
+    description: Apply ordered SQL migrations using a dedicated deployment Job.
+    type: boolean
+    default: true
+    group: Database
+  - variable: schemaMigration.expectedVersion
+    label: Expected schema version
+    description: Must match the highest migration bundled in the migration image.
+    type: string
+    default: "014"
+    group: Database
+  - variable: networkPolicy.enabled
+    label: Enable network policies
+    description: Restrict Catalogue API and Job network traffic to required paths.
+    type: boolean
+    default: true
+    group: Security
+  - variable: networkPolicy.allowExternalHttpsEgress
+    label: Allow external HTTPS egress
+    description: Required when token validation or JWKS endpoints are outside the namespace.
+    type: boolean
+    default: true
+    group: Security
+  - variable: global.catalogueCountryCode
+    label: Catalogue country
+    description: Alpha-3 country code expected by the API and SQL seed manifest.
+    type: string
+    default: ETH
+    group: Catalogue
+  - variable: sqlSeed.enabled
+    label: Publish SQL catalogue data
+    type: boolean
+    default: true
+    group: SQL Seed
+  - variable: sqlSeed.schedule.enabled
+    label: Enable scheduled reconciliation
+    type: boolean
+    default: true
+    group: SQL Seed
+  - variable: sqlSeed.schedule.cron
+    label: Reconciliation schedule
+    description: Kubernetes CronJob expression. Unchanged source checksums are skipped.
+    type: string
+    default: "0 2 * * *"
+    group: SQL Seed
+  - variable: catalogueSeed.enabled
+    label: Publish country-pack data
+    type: boolean
+    default: false
+    group: Optional Country Pack
+  - variable: catalogueSeed.countryPack
+    label: Country catalogue pack
+    description: Alpha-3 directory name under the configured catalogue pack root.
+    type: string
+    default: ETH
+    group: Optional Country Pack
+  - variable: monitoring.serviceMonitor.enabled
+    label: Enable ServiceMonitor
+    description: Create a Prometheus Operator ServiceMonitor for Catalogue API metrics.
+    type: boolean
+    default: false
+    group: Monitoring
+  - variable: monitoring.prometheusRule.enabled
+    label: Enable alert rules
+    description: Create Prometheus alerts for API, readiness, release freshness, and SQL imports.
+    type: boolean
+    default: false
+    group: Monitoring

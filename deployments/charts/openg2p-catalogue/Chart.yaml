@@ -1,0 +1,14 @@
+apiVersion: v2
+name: openg2p-catalogue
+description: OpenG2P Catalogue Service
+type: application
+version: 0.2.0
+appVersion: "0.2.0"
+dependencies:
+  - name: common
+    repository: https://openg2p.github.io/openg2p-helm
+    version: 2.30.0
+  - name: postgres-init
+    repository: https://openg2p.github.io/openg2p-helm
+    version: 1.2.0
+    condition: postgres-init.enabled

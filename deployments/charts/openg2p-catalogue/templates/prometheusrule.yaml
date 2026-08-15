@@ -1,0 +1,68 @@
+{{- if and .Values.catalogueAPI.enabled .Values.monitoring.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "catalogue.apiName" . }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+    {{- with .Values.monitoring.prometheusRule.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: {{ include "catalogue.apiName" . }}.availability
+      rules:
+        - alert: CatalogueAPIHighErrorRate
+          expr: |
+            sum(rate(catalogue_http_requests_total{status_code=~"5.."}[5m]))
+            /
+            sum(rate(catalogue_http_requests_total[5m]))
+            > {{ .Values.monitoring.prometheusRule.apiErrorRateThreshold }}
+            and sum(rate(catalogue_http_requests_total[5m])) > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Catalogue API has an elevated server-error rate
+            description: More than the configured fraction of Catalogue API requests returned 5xx for 10 minutes.
+        - alert: CatalogueAPINotReady
+          expr: sum(increase(catalogue_readiness_checks_total{result="not_ready"}[5m])) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Catalogue API is not ready
+            description: Database connectivity or schema compatibility checks are failing.
+        - alert: CatalogueReleaseStale
+          expr: |
+            max(catalogue_active_release_timestamp_seconds) > 0
+            and
+            time() - max(catalogue_active_release_timestamp_seconds)
+            > {{ .Values.monitoring.prometheusRule.releaseMaxAgeSeconds }}
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: Active catalogue release is stale
+            description: The active release is older than the configured maximum age.
+        - alert: CatalogueSQLImportStale
+          expr: |
+            max(catalogue_last_successful_import_timestamp_seconds) > 0
+            and
+            time() - max(catalogue_last_successful_import_timestamp_seconds)
+            > {{ .Values.monitoring.prometheusRule.seedMaxAgeSeconds }}
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: Catalogue SQL imports are stale
+            description: No successful or unchanged SQL import has completed within the configured interval.
+        - alert: CatalogueSQLSeedJobFailed
+          expr: max(kube_job_status_failed{job_name=~".*-sql-seed(-.*)?"}) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Catalogue SQL seed Job failed
+            description: A Catalogue SQL seed or scheduled reconciliation Job has failed.
+{{- end }}

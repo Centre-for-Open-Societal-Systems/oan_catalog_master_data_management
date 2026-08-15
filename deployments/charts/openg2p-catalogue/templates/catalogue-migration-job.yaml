@@ -1,0 +1,51 @@
+{{- if .Values.schemaMigration.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-migrate-%s-r%d" (include "catalogue.fullname" .) .Values.schemaMigration.expectedVersion .Release.Revision | lower | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+    app.kubernetes.io/component: schema-migration
+spec:
+  backoffLimit: {{ .Values.schemaMigration.backoffLimit }}
+  ttlSecondsAfterFinished: {{ .Values.schemaMigration.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ printf "%s-migration" (include "catalogue.fullname" .) | trunc 63 }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.catalogueAPI.podSecurityContext | nindent 8 }}
+      containers:
+        - name: schema-migration
+          image: {{ printf "%s:%s" .Values.schemaMigration.image.repository .Values.schemaMigration.image.tag | quote }}
+          imagePullPolicy: {{ .Values.schemaMigration.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.catalogueAPI.containerSecurityContext | nindent 12 }}
+          args:
+            - --migrations
+            - /migration/sql
+            - --expected-version
+            - {{ .Values.schemaMigration.expectedVersion | quote }}
+            - --wait-seconds
+            - {{ .Values.schemaMigration.waitSeconds | quote }}
+          env:
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.catalogueDBPort | quote }}
+            - name: PGDATABASE
+              value: {{ tpl .Values.global.catalogueDB $ | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.catalogueDBUser $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.catalogueDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.catalogueDBUserPasswordKey $ | quote }}
+          resources:
+            {{- toYaml .Values.schemaMigration.resources | nindent 12 }}
+{{- end }}
