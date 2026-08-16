@@ -1,0 +1,39 @@
+{
+  "category_status_counts": {
+    "ALIGNED": 119,
+    "CATEGORY_MISSING": 28,
+    "DIVERGENT": 1,
+    "SOURCE_CATEGORY_ONLY": 2
+  },
+  "counts": {
+    "crop_variety_rows": 902,
+    "crop_variety_rows_missing_category": 666,
+    "crop_variety_rows_with_category": 236,
+    "matched_crops": 120,
+    "source_categories": 7,
+    "source_crops": 150,
+    "source_crops_missing_category": 28,
+    "source_crops_with_category": 122,
+    "taxonomy_categories": 8,
+    "taxonomy_crop_types": 119,
+    "unresolved_crops": 30
+  },
+  "crop_variety_category_counts": {
+    "Cereal Crops": 166,
+    "NULL": 666,
+    "Oil Crop": 31,
+    "Pulse Crops": 39
+  },
+  "crop_variety_category_mismatches": [],
+  "format_version": 1,
+  "match_method_counts": {
+    "SOURCE_TYPE_CODE": 120,
+    "UNRESOLVED": 30
+  },
+  "source_contract": {
+    "category_file": "02_insert_crop_category.sql",
+    "crop_file": "04_insert_crop_catalog.sql",
+    "directory": "crop_catalog_scripts",
+    "variety_file": "05_insert_crop_variety.sql"
+  }
+}

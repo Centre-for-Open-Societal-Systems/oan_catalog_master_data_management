@@ -1,0 +1,168 @@
+global:
+  catalogueHostname: catalogue.qa.openg2p.org
+  postgresqlHost: commons-postgresql
+  catalogueDB: catalogue
+  catalogueDBPort: 5432
+  catalogueDBUser: catalogue_user
+  catalogueDBSecret: catalogue
+  catalogueDBUserPasswordKey: catalogue-db-user
+  catalogueCountryCode: ETH
+  authClientId: catalogue-service
+  authProviderApiUrl: http://iam-staff-portal-api
+
+postgres-init:
+  enabled: true
+  postgresql:
+    host: '{{ tpl .Values.global.postgresqlHost $ }}'
+    port: 5432
+    existingSecret: commons-postgresql
+    existingSecretPostgresPasswordKey: postgres-password
+  databases:
+    - name: '{{ tpl .Values.global.catalogueDB $ }}'
+      user: '{{ tpl .Values.global.catalogueDBUser $ }}'
+      secret: '{{ tpl .Values.global.catalogueDBSecret $ }}'
+      secretUserPasswordKey: '{{ tpl .Values.global.catalogueDBUserPasswordKey $ }}'
+
+schemaMigration:
+  enabled: true
+  expectedVersion: "014"
+  waitSeconds: 300
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 600
+  image:
+    repository: registry.gitlab.com/openg2p/catalogue-service/catalogue-db-migration
+    tag: develop
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+
+catalogueAPI:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: registry.gitlab.com/openg2p/catalogue-service/catalogue-api
+    tag: develop
+    pullPolicy: Always
+  serviceAccount:
+    create: false
+    name: ""
+  service:
+    type: ClusterIP
+    port: 80
+    # Stable, release-independent Kubernetes DNS name used by platform
+    # resolvers. The chart's release-scoped Service remains available.
+    discovery:
+      enabled: true
+      name: catalogue-api
+  containerPort: 8000
+  waitImage: postgres:16-alpine
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    fsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    capabilities:
+      drop: ["ALL"]
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  probes:
+    readinessTimeoutSeconds: 5
+    startup:
+      failureThreshold: 30
+      periodSeconds: 10
+    readiness:
+      failureThreshold: 6
+      periodSeconds: 10
+    liveness:
+      failureThreshold: 6
+      periodSeconds: 30
+  istio:
+    enabled: true
+    gateway:
+      enabled: false
+      name: internal
+    virtualservice:
+      enabled: true
+
+monitoring:
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
+  prometheusRule:
+    enabled: false
+    labels: {}
+    apiErrorRateThreshold: 0.05
+    releaseMaxAgeSeconds: 604800
+    seedMaxAgeSeconds: 172800
+
+catalogueSeed:
+  # Optional country-pack publisher retained for compatibility. SQL sources are
+  # the default for this service and are configured under sqlSeed below.
+  enabled: false
+  packRoot: /catalogue-data/packs
+  countryPack: ETH
+  domains: []
+  image:
+    repository: registry.gitlab.com/openg2p/catalogue-service/catalogue-db-seed
+    tag: develop
+    pullPolicy: Always
+  waitImage: postgres:16-alpine
+  backoffLimit: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+
+sqlSeed:
+  enabled: true
+  manifest: /seed/sql/manifest.yaml
+  image:
+    repository: registry.gitlab.com/openg2p/catalogue-service/catalogue-db-seed
+    tag: develop
+    pullPolicy: Always
+  waitImage: postgres:16-alpine
+  backoffLimit: 2
+  schedule:
+    enabled: true
+    cron: "0 2 * * *"
+    timeZone: "Africa/Addis_Ababa"
+    concurrencyPolicy: Forbid
+    successfulJobsHistoryLimit: 2
+    failedJobsHistoryLimit: 5
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+
+networkPolicy:
+  enabled: true
+  ingressNamespaces:
+    - istio-system
+  allowExternalHttpsEgress: true

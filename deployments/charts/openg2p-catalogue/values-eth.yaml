@@ -1,0 +1,7 @@
+global:
+  catalogueCountryCode: ETH
+
+catalogueSeed:
+  countryPack: ETH
+  domains:
+    - agriculture

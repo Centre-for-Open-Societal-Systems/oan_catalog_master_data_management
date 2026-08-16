@@ -1,0 +1,229 @@
+schema_version: "1.8"
+country_code: ETH
+source_version: ETH-catalogue-v9
+source: Ethiopia Ministry of Agriculture legacy SQL datasets, crop taxonomy workbook, and kebele register
+
+# The runner executes these in order, checksums each file, and publishes only
+# after every script and validation succeeds.
+scripts:
+  - id: locations
+    filename: import_location_data.sql
+    order: 10
+    dataset_kind: geography
+    staging_tables:
+      - g2p_region
+      - g2p_zone
+      - g2p_woreda
+    canonical_targets:
+      - geography_levels
+      - geography_units
+    expected_minimum_rows:
+      g2p_region: 14
+      g2p_zone: 101
+      g2p_woreda: 1141
+    # The inherited source contains three woredas whose referenced zone rows
+    # are absent. They are published with no parent and an explicit data-quality
+    # marker. Any new orphan outside this reviewed allow-list fails the run.
+    allowed_missing_parent_codes:
+      - ET0700
+      - ET0725
+      - ET0726
+
+  - id: kebeles
+    filename: import_kebele_data.sql
+    order: 12
+    dataset_kind: geography
+    staging_tables:
+      - g2p_zone
+      - g2p_woreda
+      - g2p_kebele
+    canonical_targets:
+      - geography_levels
+      - geography_units
+    expected_rows:
+      g2p_zone: 125
+      g2p_woreda: 1379
+      g2p_kebele: 19570
+    expected_match_status_rows:
+      MATCHED: 19535
+      UNRESOLVED: 35
+    expected_match_method_rows:
+      EXACT_WOREDA_CODE: 17882
+      WOREDA_REFERENCE: 1629
+      REVIEWED_CODE_HIERARCHY: 21
+      REVIEWED_CROSSWALK: 3
+      UNRESOLVED: 35
+
+  - id: catalog-related
+    filename: import_catalog_related.sql
+    order: 15
+    dataset_kind: catalogue
+    staging_tables:
+      - g2p_crop_category
+      - g2p_ecological_zone
+    canonical_targets:
+      - catalogues
+      - catalogue_values
+      - catalogue_value_relations
+    expected_minimum_rows:
+      g2p_crop_category: 7
+      g2p_ecological_zone: 3
+
+  - id: crops
+    filename: import_crop_catalog.sql
+    order: 20
+    dataset_kind: catalogue
+    catalogue_code: crop
+    staging_tables:
+      - g2p_crop
+    canonical_targets:
+      - catalogues
+      - catalogue_values
+    expected_rows:
+      g2p_crop: 150
+    expected_record_source_rows:
+      SQL_CROP_CATALOG: 129
+      WORKBOOK_ADDITION: 21
+    expected_taxonomy_match_status_rows:
+      MATCHED: 120
+      UNRESOLVED: 30
+    expected_varieties_count_source_rows:
+      SQL_CROP_VARIETY: 129
+      WORKBOOK_CROP_VARIETY: 21
+    expected_category_source_rows:
+      SQL_CROP_CATALOG: 17
+      WORKBOOK_TAXONOMY_MAPPING: 105
+      UNRESOLVED: 28
+
+  - id: crop-taxonomy
+    filename: import_crop_taxonomy.sql
+    order: 25
+    dataset_kind: catalogue
+    staging_tables:
+      - g2p_crop_taxonomy_category
+      - g2p_crop_taxonomy_type
+      - g2p_crop_variety
+      - g2p_crop_variety_source_record
+      - g2p_crop_characteristic_definition
+      - g2p_crop_variety_characteristic
+    canonical_targets:
+      - catalogues
+      - catalogue_values
+      - catalogue_value_relations
+      - crop_variety_source_records
+      - crop_characteristic_definitions
+      - crop_variety_characteristics
+    expected_rows:
+      g2p_crop_taxonomy_category: 8
+      g2p_crop_taxonomy_type: 119
+      g2p_crop_variety: 1359
+      g2p_crop_variety_source_record: 1360
+      g2p_crop_characteristic_definition: 359
+      g2p_crop_variety_characteristic: 10322
+    allowed_missing_type_source_ids:
+      - fine-bush
+
+  - id: livestock
+    filename: import_livestock_data.sql
+    order: 30
+    dataset_kind: mixed
+    staging_tables:
+      - g2p_livestock_type
+      - g2p_livestock_population
+      - g2p_livestock_breed
+      - g2p_livestock_gender
+      - g2p_livestock_location_type
+      - g2p_livestock_body_condition
+      - g2p_livestock_production_type
+      - g2p_livestock_production_type_species
+      - g2p_livestock_record_status
+      - g2p_livestock_registry_entry
+    canonical_targets:
+      - catalogues
+      - catalogue_values
+      - catalogue_value_relations
+      - livestock_population_statistics
+      - livestock_registry_entries
+      - livestock_registry_validation
+    required_catalogue_values:
+      livestock_type:
+        - beehive
+        - camel
+        - cattle
+        - goat
+        - sheep
+    expected_rows:
+      g2p_livestock_type: 5
+      g2p_livestock_population: 40
+      g2p_livestock_breed: 94
+      g2p_livestock_gender: 4
+      g2p_livestock_location_type: 3
+      g2p_livestock_body_condition: 5
+      g2p_livestock_production_type: 13
+      g2p_livestock_production_type_species: 34
+      g2p_livestock_record_status: 6
+      g2p_livestock_registry_entry: 12
+    expected_uncoded_breeds: 4
+    allowed_unlinked_production_types:
+      - Egg
+    expected_live_record_statuses:
+      - ACTIVE
+    expected_registry_validation_rows:
+      breed_unrecognised: 2
+      breed_outside_national_standard: 5
+      breed_species_mismatch: 1
+      production_type_species_mismatch: 3
+
+  - id: seeds
+    filename: import_seed_data.sql
+    order: 40
+    dataset_kind: mixed
+    catalogue_code: seed_crop
+    staging_tables:
+      - g2p_seed_catalog
+      - g2p_seed_demand_summary
+      - g2p_seed_demand_trend
+      - g2p_seed_demand_trend_by_crop
+    canonical_targets:
+      - catalogues
+      - catalogue_values
+      - seed_demand_summary_statistics
+      - seed_demand_trend_statistics
+      - seed_demand_by_crop_statistics
+    expected_minimum_rows:
+      g2p_seed_catalog: 129
+      g2p_seed_demand_summary: 1
+      g2p_seed_demand_trend: 5
+      g2p_seed_demand_trend_by_crop: 18
+
+  - id: seed-varieties
+    filename: import_seed_variety.sql
+    order: 45
+    dataset_kind: catalogue
+    staging_tables:
+      - g2p_seed_variety_source_record
+    canonical_targets: []
+    expected_rows:
+      g2p_seed_variety_source_record: 902
+
+  - id: seed-variety-matches
+    filename: import_seed_variety_matches.sql
+    order: 46
+    dataset_kind: catalogue
+    staging_tables:
+      - g2p_seed_variety_source_record
+    canonical_targets:
+      - catalogues
+      - catalogue_values
+      - catalogue_value_relations
+      - seed_variety_source_records
+    expected_rows:
+      g2p_seed_variety_source_record: 902
+    expected_match_status_rows:
+      MATCHED: 309
+      UNRESOLVED: 593
+    expected_match_method_rows:
+      EXACT_SOURCE_ID: 1
+      EXACT_NAME_AND_CROP: 308
+      UNRESOLVED: 593
+    expected_consolidated_crop_variety_rows: 1952

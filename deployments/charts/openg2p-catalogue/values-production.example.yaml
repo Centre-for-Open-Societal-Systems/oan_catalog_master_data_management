@@ -1,0 +1,58 @@
+global:
+  catalogueHostname: catalogue.example.org
+  postgresqlHost: postgresql.database.svc.cluster.local
+  catalogueDB: catalogue
+  catalogueDBUser: catalogue_user
+  catalogueDBSecret: catalogue-db-credentials
+  catalogueDBUserPasswordKey: password
+  catalogueCountryCode: ETH
+  authClientId: catalogue-service
+  authProviderApiUrl: http://iam-api.iam.svc.cluster.local
+
+postgres-init:
+  enabled: false
+
+catalogueAPI:
+  replicaCount: 2
+  service:
+    discovery:
+      enabled: true
+      name: catalogue-api
+  image:
+    repository: ghcr.io/your-organization/catalogue-service/catalogue-api
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+
+schemaMigration:
+  image:
+    repository: ghcr.io/your-organization/catalogue-service/catalogue-db-migration
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+
+sqlSeed:
+  image:
+    repository: ghcr.io/your-organization/catalogue-service/catalogue-db-seed
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
+  prometheusRule:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
+
+networkPolicy:
+  enabled: true
+  ingressNamespaces:
+    - istio-system
+    - monitoring
+    # Add the namespace containing the platform resolver/widget backend here.
+    # - openg2p-platform

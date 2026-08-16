@@ -1,0 +1,151 @@
+crop_id,crop_name,source_category_id,source_category_name,taxonomy_type_code,taxonomy_type_name,taxonomy_category_code,taxonomy_category_name,match_method,match_status,category_status,review_note
+1,Maize ( Zea mays L.),1,Cereal Crops,maize,Maize,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+2,Bread wheat (Triticum aestivum L.),1,Cereal Crops,bread-wheat,Bread wheat,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+3,Durum Wheat,1,Cereal Crops,durum-wheat,Durum wheat,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+4,Food Barley,1,Cereal Crops,barley,Barley,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+5,Malt Barley,1,Cereal Crops,barley,Barley,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+6,Tef ( Eragrostis tef),1,Cereal Crops,tef,Tef,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+7,Sorghum (Sorghum bicolor),1,Cereal Crops,sorghum,Sorghum,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+8,Millet,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+9,Rice,1,Cereal Crops,rice,Rice,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+10,Finger Millet,1,Cereal Crops,finger-millet,Finger millet,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+12,Triticale,1,Cereal Crops,triticale,Triticale,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+13,Emmer wheat (Aja),1,Cereal Crops,emmer-wheat,Emmer wheat,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+14,Buck wheat,10,Other Crops,buck-wheat,Buck wheat,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,DIVERGENT,Source and workbook classifications disagree; manual decision required
+15,Pearl millet,1,Cereal Crops,pearl-millet,Pearl millet,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+16,Foxtail millet,1,Cereal Crops,foxtail-millet,Foxtail millet,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+17,Quinoa,1,Cereal Crops,quinoa,Quinoa,cereal,Cereal,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+18,Food oat,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+19,Faba bean,2,Pulse Crops,faba-bean,Faba bean,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+20,Field pea,2,Pulse Crops,field-pea,Field pea,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+21,Dekoko,2,Pulse Crops,dekoko,Dekoko,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+22,Chickpea,2,Pulse Crops,chickpea,Chickpea,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+23,Cowpea,2,Pulse Crops,cowpea,Cowpea,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+24,Lentil,2,Pulse Crops,lentil,Lentil,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+25,Common/Haricot/ bean,2,Pulse Crops,haricot-bean,Haricot bean,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+26,Soybean,3,Oil Crops,soybean,Soybean,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+27,Grass pea/ ''Guaya'',2,Pulse Crops,grass-pea,Grass pea,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+28,Mung bean,2,Pulse Crops,mung-bean,Mung bean,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+29,Fenugreek,10,Other Crops,fenugreek,Fenugreek,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+30,Noug,3,Oil Crops,noug,Noug,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+31,Linseed,3,Oil Crops,linseed,Linseed,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+32,Rapeseed,3,Oil Crops,rapeseed,Rapeseed,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+33,Sesame,3,Oil Crops,sesame,Sesame,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+34,Groundnut,3,Oil Crops,groundnut,Groundnut,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+35,Sunflower,3,Oil Crops,sunflower,Sunflower,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+36,Safflower,3,Oil Crops,safflower,Safflower,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+37,Vernonia,10,Other Crops,vernonia,Vernonia,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+38,Castor,10,Other Crops,castor,Castor,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+39,Camelina sativa,10,Other Crops,camelina,Camelina,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+40,Irish potato,5,"Tubers, Roots & Vegetable Crops",potato,Potato,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+41,Sweet potato,5,"Tubers, Roots & Vegetable Crops",sweet-potato,Sweet potato,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+42,Taro,5,"Tubers, Roots & Vegetable Crops",taro,Taro,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+43,Cassava,5,"Tubers, Roots & Vegetable Crops",cassava,Cassava,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+44,Enset,5,"Tubers, Roots & Vegetable Crops",enset,Enset,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+45,Yam,5,"Tubers, Roots & Vegetable Crops",yam,Yam,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+46,Tomato,5,"Tubers, Roots & Vegetable Crops",tomato,Tomato,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+47,Garlic,5,"Tubers, Roots & Vegetable Crops",garlic,Garlic,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+48,Onion,5,"Tubers, Roots & Vegetable Crops",onion,Onion,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+49,Shallot,5,"Tubers, Roots & Vegetable Crops",shallot,Shallot,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+50,Sweet/Hot Pepper,5,"Tubers, Roots & Vegetable Crops",pepper,Pepper,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+51,Cabbage,5,"Tubers, Roots & Vegetable Crops",cabbage,Cabbage,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+52,Carrot,5,"Tubers, Roots & Vegetable Crops",carrot,Carrot,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+53,Okra,5,"Tubers, Roots & Vegetable Crops",okra,Okra,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+54,Anchote,5,"Tubers, Roots & Vegetable Crops",anchote,Anchote,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+55,Summer squash,5,"Tubers, Roots & Vegetable Crops",summer-squash,Summer squash,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+56,Summarsquash,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+57,Coriander,10,Other Crops,coriander,Coriander,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+58,Black pepper,10,Other Crops,black-pepper,Black pepper,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+59,Ginger,10,Other Crops,ginger,Ginger,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+60,Turmeric,10,Other Crops,turmeric,Turmeric,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+61,Cardamom,10,Other Crops,cardamom,Cardamom,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+62,Sweet annie,10,Other Crops,sweet-annie,Sweet annie,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+63,Citronella grass,10,Other Crops,citronella-grass,Citronella grass,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+64,Pyrethrum,10,Other Crops,pyrethrum,Pyrethrum,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+65,Cumin,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+66,Lemmon grass,10,Other Crops,lemon-grass,Lemon grass,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+67,Speare mint,10,Other Crops,spearmint,Spearmint,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+68,Spanish mint,10,Other Crops,spanish-mint,Spanish mint,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+69,African marigold,10,Other Crops,african-marigold,African marigold,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+70,Rose Scented Geranium,10,Other Crops,geranium,Geranium,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+71,Chamomile,10,Other Crops,chamomile,Chamomile,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+72,Lemon verbena,10,Other Crops,lemon-verbena,Lemon verbena,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+73,Stevia,10,Other Crops,stevia,Stevia,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+74,Hibiscus,10,Other Crops,hibiscus,Hibiscus,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+75,Lavender,10,Other Crops,lavender,Lavender,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+76,Majoram/Oregano,10,Other Crops,majoram-oregano,Majoram/ Oregano,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+77,Sage,10,Other Crops,sage,Sage,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+78,Vanilla,10,Other Crops,vanilla,Vanilla,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+79,Basil,10,Other Crops,basil,Basil,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+80,Banana,5,"Tubers, Roots & Vegetable Crops",banana,Banana,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+81,Mango,5,"Tubers, Roots & Vegetable Crops",mango,Mango,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+82,Pineapple,5,"Tubers, Roots & Vegetable Crops",pineapple,Pineapple,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+83,Wine grape,5,"Tubers, Roots & Vegetable Crops",wine-grape,Wine grape,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+84,Avocado,6,Fruit Crops,avocado,Avocado,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+85,Date palm,5,"Tubers, Roots & Vegetable Crops",date-palm,Date palm,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+86,Tree lucerne,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+87,Elephant grass,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+88,Rhode,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+89,Panicum,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+90,Dolicos lablab,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+91,Phalaries,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+92,Trifolium,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+93,Vetch,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+94,Cow pea,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+95,Andropogon,7,Forage and Pasture Crops,,,,,UNRESOLVED,UNRESOLVED,SOURCE_CATEGORY_ONLY,No reviewed workbook crop-type match
+96,Pigeon pea,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+97,Oats,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+98,Sesbania,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+99,Pennisetum polystachion,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+100,Panicum maximum,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+101,Lupin,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+102,Alfalfa (Medicago sativa),7,Forage and Pasture Crops,,,,,UNRESOLVED,UNRESOLVED,SOURCE_CATEGORY_ONLY,No reviewed workbook crop-type match
+103,Pennisetum sphacelatum,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+104,Perennial grass,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+105,Desho grass,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+106,Napier grass,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+107,Local forage legume,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+108,Mulberry,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+109,Cotton,10,Other Crops,cotton,Cotton,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+110,Kenaf,10,Other Crops,kenaf,Kenaf,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+111,Sugarcane,10,Other Crops,sugarcane,Sugarcane,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+112,Coffee,10,Other Crops,coffee,Coffee,stimulant-crops,Stimulant Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+113,Tobaco,10,Other Crops,tobaco,Tobaco,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+114,Adzuki bean,2,Pulse Crops,adzuki-bean,Adzuki bean,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+115,Lima bean,2,Pulse Crops,lima-bean-butter-bean,Lima bean (butter bean),food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+116,Lettuce,5,"Tubers, Roots & Vegetable Crops",lettuce,Lettuce,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+117,Water melon,5,"Tubers, Roots & Vegetable Crops",water-melon,Water melon,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+118,Musk melon,5,"Tubers, Roots & Vegetable Crops",musk-melon,Musk melon,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+119,Broccoli,5,"Tubers, Roots & Vegetable Crops",broccoli,Broccoli,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+120,Cauliflower,5,"Tubers, Roots & Vegetable Crops",cauliflower,Cauliflower,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+121,Snap pea,5,"Tubers, Roots & Vegetable Crops",snap-pea,Snap pea,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+122,Snow pea,5,"Tubers, Roots & Vegetable Crops",snow-pea,Snow pea,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+123,Sweet corn,5,"Tubers, Roots & Vegetable Crops",sweet-corn,Sweet corn,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+124,Kororima,10,Other Crops,kororima,Kororima,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+125,Rose,10,Other Crops,rose,Rose,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+126,Brachiaria brizantha cv. Xaraes descriptors,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+127,Sorghum forage,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+128,Forage Soyabean,,,,,,,UNRESOLVED,UNRESOLVED,CATEGORY_MISSING,No reviewed workbook crop-type match
+129,Cacao,10,Other Crops,cacao,Cacao,industrial-crops,Industrial Crops,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+132,Ethiopian mustard,3,Oil Crops,ethiopian-mustard,Ethiopian mustard,oil-seeds,Oil seeds,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+133,Amaranthus,5,"Tubers, Roots & Vegetable Crops",amaranthus,Amaranthus,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+134,Black cumin,10,Other Crops,black-cumin,Black cumin,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+135,Common bean,2,Pulse Crops,common-bean,Common bean,food-legume,Food legume,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+136,Cuccumber,5,"Tubers, Roots & Vegetable Crops",cuccumber,Cuccumber,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+137,Eggplant,5,"Tubers, Roots & Vegetable Crops",eggplant,Eggplant,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+138,Fig,6,Fruit Crops,fig,Fig,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+139,Fine bush,5,"Tubers, Roots & Vegetable Crops",fine-bush,Fine bush,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+140,Green courgette,5,"Tubers, Roots & Vegetable Crops",green-courgette,Green courgette,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+141,Japanese mint,10,Other Crops,japanese-mint,Japanese mint,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+142,Lemon scented eucalyptus,10,Other Crops,lemon-scented-eucalyptus,Lemon scented eucalyptus,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+143,Pakchoi,5,"Tubers, Roots & Vegetable Crops",pakchoi,Pakchoi,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+144,Palmarosa,10,Other Crops,palmarosa,Palmarosa,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+145,Papaya,6,Fruit Crops,papaya,Papaya,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+146,Peach,6,Fruit Crops,peach,Peach,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+147,Peppermint,10,Other Crops,peppermint,Peppermint,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+148,Red beet,5,"Tubers, Roots & Vegetable Crops",red-beet,Red beet,roots-and-tubers,Roots and Tubers,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+149,Rosemary,10,Other Crops,rosemary,Rosemary,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+150,Snap bean,5,"Tubers, Roots & Vegetable Crops",snap-bean,Snap bean,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+151,White cumin,10,Other Crops,white-cumin,White cumin,spices-condiments-medicinal-aromatic,"Spices, Condiments, Medicinal and Aromatic Plants",SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+152,Yellow courgette,5,"Tubers, Roots & Vegetable Crops",yellow-courgette,Yellow courgette,fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,
+153,Ziziphus (Kurkura),6,Fruit Crops,ziziphus-kurkura,Ziziphus (Kurkura),fruit-and-vegetables,Fruit and Vegetables,SOURCE_TYPE_CODE,MATCHED,ALIGNED,

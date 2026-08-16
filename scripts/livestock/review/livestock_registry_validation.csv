@@ -1,0 +1,13 @@
+registry_id,status,species_code,breed_name,breed_id,breed_code,breed_species_code,production_type_code,breed_unrecognised,breed_outside_national_standard,breed_species_mismatch,production_type_species_mismatch
+livestock-008569662215,ACTIVE,cattle,Boran,10,1.01.10,cattle,Milk,FALSE,FALSE,FALSE,FALSE
+livestock-019210037813,ACTIVE,camel,Boran,10,1.01.10,cattle,Meat,FALSE,FALSE,TRUE,FALSE
+livestock-198953821362,INACTIVE,cattle,Gir,92,,cattle,Milk,FALSE,TRUE,FALSE,FALSE
+livestock-212708917710,REJECTED,sheep,Merino,77,3.02.06,sheep,Dual Purpose,FALSE,FALSE,FALSE,FALSE
+livestock-293287324110,APPROVED,cattle,BoranR,,,,Castrated,TRUE,FALSE,FALSE,FALSE
+livestock-350410916860,PENDING,beehive,Honey Bee,94,,beehive,Honey,FALSE,TRUE,FALSE,FALSE
+livestock-414930215931,INACTIVE,goat,Boer,91,,goat,Pack Animal,FALSE,TRUE,FALSE,TRUE
+livestock-469557638335,PENDING,cattle,Test,,,,Meat,TRUE,FALSE,FALSE,FALSE
+livestock-479102083675,PENDING,sheep,Dorper,75,3.02.04,sheep,Breeding,FALSE,FALSE,FALSE,FALSE
+livestock-738602771660,REWORK,camel,Ethiopian Camel,93,,camel,Pack Animal,FALSE,TRUE,FALSE,FALSE
+livestock-758330957676,REWORK,goat,Boer,91,,goat,Pack Animal,FALSE,TRUE,FALSE,TRUE
+livestock-918889998727,REWORK,cattle,Holstein Friesian,26,1.02.01,cattle,Egg,FALSE,FALSE,FALSE,TRUE

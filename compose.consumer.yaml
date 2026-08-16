@@ -1,0 +1,104 @@
+name: openg2p-catalogue-consumer
+
+# This profile consumes one prebuilt catalogue release image. The same image is
+# run with different commands for migration, seeding, and API serving. It is intended for local
+# evaluation and integration testing; production deployments use the Helm chart
+# and the IAM-protected API entry point.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${CATALOGUE_DB:-catalogue}
+      POSTGRES_USER: ${CATALOGUE_DB_USER:-catalogue}
+      POSTGRES_PASSWORD: ${CATALOGUE_DB_PASSWORD:?Set CATALOGUE_DB_PASSWORD}
+    volumes:
+      - catalogue-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${CATALOGUE_DB_USER:-catalogue} -d ${CATALOGUE_DB:-catalogue}
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  migrate:
+    image: ${CATALOGUE_IMAGE:?Set CATALOGUE_IMAGE}:${CATALOGUE_IMAGE_TAG:-0.2.0}
+    environment: &database-environment
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: ${CATALOGUE_DB:-catalogue}
+      PGUSER: ${CATALOGUE_DB_USER:-catalogue}
+      PGPASSWORD: ${CATALOGUE_DB_PASSWORD:?Set CATALOGUE_DB_PASSWORD}
+    command:
+      - python
+      - /migration/migrate_database.py
+      - --migrations
+      - /migration/sql
+      - --expected-version
+      - "014"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  seed:
+    image: ${CATALOGUE_IMAGE:?Set CATALOGUE_IMAGE}:${CATALOGUE_IMAGE_TAG:-0.2.0}
+    environment: *database-environment
+    command:
+      - python
+      - /seed/run_sql_seeds.py
+      - --manifest
+      - /seed/sql/manifest.yaml
+      - --expected-country
+      - ${CATALOGUE_COUNTRY_CODE:-ETH}
+      - --trigger
+      - MANUAL
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    image: ${CATALOGUE_IMAGE:?Set CATALOGUE_IMAGE}:${CATALOGUE_IMAGE_TAG:-0.2.0}
+    environment:
+      CATALOGUE_API_DEV_MODE: "true"
+      HOME: /tmp
+      CATALOGUE_API_DB_HOSTNAME: postgres
+      CATALOGUE_API_DB_PORT: "5432"
+      CATALOGUE_API_DB_DBNAME: ${CATALOGUE_DB:-catalogue}
+      CATALOGUE_API_DB_USERNAME: ${CATALOGUE_DB_USER:-catalogue}
+      CATALOGUE_API_DB_PASSWORD: ${CATALOGUE_DB_PASSWORD:?Set CATALOGUE_DB_PASSWORD}
+      CATALOGUE_API_DEFAULT_COUNTRY_CODE: ${CATALOGUE_COUNTRY_CODE:-ETH}
+      CATALOGUE_API_EXPECTED_SCHEMA_VERSION: "014"
+      CATALOGUE_API_NO_OF_WORKERS: "1"
+      PROMETHEUS_MULTIPROC_DIR: /tmp/prometheus
+    command:
+      - gunicorn
+      - openg2p_catalogue_service.dev_main:app
+      - --workers
+      - "1"
+      - --worker-class
+      - uvicorn.workers.UvicornWorker
+      - --bind
+      - 0.0.0.0:8000
+    ports:
+      - "${CATALOGUE_API_PORT:-8000}:8000"
+    tmpfs:
+      - /tmp/prometheus:mode=770,uid=10001,gid=10001
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  catalogue-data:

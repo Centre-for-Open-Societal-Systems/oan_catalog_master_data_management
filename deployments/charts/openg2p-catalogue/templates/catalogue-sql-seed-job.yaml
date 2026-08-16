@@ -1,0 +1,84 @@
+{{- if .Values.sqlSeed.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-sql-seed" (include "catalogue.fullname" .) | lower | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "catalogue.labels" . | nindent 4 }}
+    app.kubernetes.io/component: sql-seed
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "5"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: {{ .Values.sqlSeed.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ printf "%s-sql-seed" (include "catalogue.fullname" .) | trunc 63 }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.catalogueAPI.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: verify-schema
+          image: {{ printf "%s:%s" .Values.schemaMigration.image.repository .Values.schemaMigration.image.tag | quote }}
+          imagePullPolicy: {{ .Values.schemaMigration.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.catalogueAPI.containerSecurityContext | nindent 12 }}
+          args:
+            - --migrations
+            - /migration/sql
+            - --expected-version
+            - {{ .Values.schemaMigration.expectedVersion | quote }}
+            - --verify-only
+            - --wait-seconds
+            - {{ .Values.schemaMigration.waitSeconds | quote }}
+          env:
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.catalogueDBPort | quote }}
+            - name: PGDATABASE
+              value: {{ tpl .Values.global.catalogueDB $ | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.catalogueDBUser $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.catalogueDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.catalogueDBUserPasswordKey $ | quote }}
+      containers:
+        - name: sql-seed
+          image: {{ printf "%s:%s" .Values.sqlSeed.image.repository .Values.sqlSeed.image.tag | quote }}
+          imagePullPolicy: {{ .Values.sqlSeed.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.catalogueAPI.containerSecurityContext | nindent 12 }}
+          command:
+            - python
+            - /seed/run_sql_seeds.py
+            - --manifest
+            - {{ .Values.sqlSeed.manifest | quote }}
+            - --expected-country
+            - {{ .Values.global.catalogueCountryCode | quote }}
+            - --trigger
+            - HELM
+          env:
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.catalogueDBPort | quote }}
+            - name: CATALOGUE_DB
+              value: {{ tpl .Values.global.catalogueDB $ | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.catalogueDBUser $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.catalogueDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.catalogueDBUserPasswordKey $ | quote }}
+          resources:
+            {{- toYaml .Values.sqlSeed.resources | nindent 12 }}
+{{- end }}
