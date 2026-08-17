@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import "./globals.css";
 import { getCurrentRelease } from "@/lib/api";
+import { AppShell } from "@/components/app-shell";
+import { DashboardLink } from "@/components/dashboard-link";
 import { NavLinks } from "@/components/nav-links";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -45,20 +47,26 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </span>
           </Link>
 
-          {release ? (
-            <div className="stamp" title="Release every figure on this page was resolved against">
-              <div>
-                <b>Country</b>
-                <span className="v">{release.country_code}</span>
+          <div className="topbar-end">
+            <Suspense fallback={null}>
+              <DashboardLink />
+            </Suspense>
+
+            {release ? (
+              <div className="stamp" title="Release every figure on this page was resolved against">
+                <div>
+                  <b>Country</b>
+                  <span className="v">{release.country_code}</span>
+                </div>
+                <div>
+                  <b>Release</b>
+                  <span className="v">{release.version}</span>
+                </div>
               </div>
-              <div>
-                <b>Release</b>
-                <span className="v">{release.version}</span>
-              </div>
-            </div>
-          ) : (
-            <span className="badge bad" style={{ marginLeft: "auto" }}>API unreachable</span>
-          )}
+            ) : (
+              <span className="badge bad">API unreachable</span>
+            )}
+          </div>
 
           <ThemeToggle />
         </header>
@@ -72,22 +80,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         )}
 
-        <div className="shell">
-          <aside className="sidebar">
-            <Suspense fallback={null}>
-              <NavLinks />
-            </Suspense>
+        <AppShell
+          sidebar={
+            <>
+              <Suspense fallback={null}>
+                <NavLinks />
+              </Suspense>
 
-            <div className="side-foot">
-              <span className="avatar">•</span>
-              <span className="who">
-                {release ? `${release.country_code} · ${release.status}` : "not connected"}
-                <span>dev · unauthenticated</span>
-              </span>
-            </div>
-          </aside>
-          <main className="main">{children}</main>
-        </div>
+              <div className="side-foot">
+                <span className="avatar">•</span>
+                <span className="who">
+                  {release ? `${release.country_code} · ${release.status}` : "not connected"}
+                  <span>dev · unauthenticated</span>
+                </span>
+              </div>
+            </>
+          }
+        >
+          {children}
+        </AppShell>
       </body>
     </html>
   );

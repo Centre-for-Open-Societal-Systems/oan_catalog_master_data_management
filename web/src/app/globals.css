@@ -175,6 +175,15 @@ a { color: inherit; }
   margin-top: 2px;
 }
 .spacer { flex: 1; }
+
+/* Right-hand cluster: dashboard entry point, then the release stamp. */
+.topbar-end {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 14px;
+  align-self: stretch;
+}
+.topbar-end .stamp { margin-left: 0; }
+
 .stamp {
   margin-left: auto;
   display: flex; align-items: stretch; gap: 0;
@@ -204,12 +213,38 @@ a { color: inherit; }
 html[data-theme="dark"] .chrome-btn .sun { display: none; }
 html:not([data-theme="dark"]) .chrome-btn .moon { display: none; }
 
+/* Labelled variant, for chrome buttons that need naming rather than a glyph. */
+.chrome-btn-wide {
+  width: auto; height: 34px; margin-right: 0;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 0 13px;
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap;
+}
+.chrome-btn-wide[aria-current="page"] {
+  background: #fff;
+  border-color: #fff;
+  color: var(--accent-deep);
+}
+html[data-theme="dark"] .chrome-btn-wide[aria-current="page"] { background: #EAF6EF; color: #00562B; }
+
 .shell {
   display: grid;
   grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
   min-height: calc(100vh - 62px);
   background: linear-gradient(to right, var(--chrome-side) 0 var(--sidebar-w), var(--paper) var(--sidebar-w));
 }
+/* Full-bleed routes (the dashboard) drop the sidebar and fill the viewport,
+   so a layout that divides its own height has a height to divide. */
+.shell-full {
+  grid-template-columns: minmax(0, 1fr);
+  height: calc(100vh - 62px);
+  min-height: 0;
+  background: var(--paper);
+}
+.main-full { height: 100%; min-height: 0; padding: 0; overflow: hidden; }
+
 .sidebar {
   position: sticky; top: 62px; align-self: start;
   height: calc(100vh - 62px);

@@ -26,6 +26,16 @@ export const ICONS = {
     </>
   ),
   seed: <path d="M12 3c3 3 5 6.5 5 9.5a5 5 0 0 1-10 0C7 9.5 9 6 12 3z" />,
+  dashboard: (
+    <>
+      <path d="M4 4h6v6H4zM14 4h6v4h-6zM14 12h6v8h-6zM4 14h6v6H4z" />
+    </>
+  ),
+  back: (
+    <>
+      <path d="M15 5l-7 7 7 7" />
+    </>
+  ),
   statistics: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
   health: <path d="M2 12h4l2-6 4 12 2.5-7 1.5 3h6" />,
 };

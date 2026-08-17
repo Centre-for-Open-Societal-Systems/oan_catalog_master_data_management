@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Tailwind for the dashboard only.
+
+   The dashboard was built in a Tailwind app; the rest of this console is
+   hand-written CSS with its own reset. Importing Tailwind whole would apply
+   Preflight to every page and reset that CSS, so only the theme and utility
+   layers are imported and the parts of Preflight the dashboard's markup
+   actually relies on are re-declared under .dash-root instead.
+
+   Scanning is limited to the dashboard's own files, so no utility is emitted
+   for a class name that happens to be shared with the console.
+   ========================================================================== */
+
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "tw-animate-css";
+
+@source "./page.tsx";
+@source "../../components/dashboard";
+
+/* Design tokens the dashboard's utilities resolve against, carried over from
+   the source app's light theme. */
+@theme {
+  --color-background: oklch(0.985 0.01 160);
+  --color-foreground: #000000;
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: #000000;
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: #000000;
+  --color-primary: oklch(0.55 0.18 145);
+  --color-primary-foreground: oklch(0.99 0 0);
+  --color-secondary: oklch(0.96 0.03 160);
+  --color-secondary-foreground: #000000;
+  --color-muted: oklch(0.96 0.01 160);
+  --color-muted-foreground: #000000;
+  --color-accent: #faa71a;
+  --color-accent-foreground: #000000;
+  --color-destructive: #dd2828;
+  --color-destructive-foreground: oklch(0.99 0 0);
+  --color-border: oklch(0.92 0.02 160);
+  --color-input: oklch(0.92 0.02 160);
+  --color-ring: oklch(0.55 0.18 145);
+
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  /* The dropdown menu is portalled to <body>, so it is reset alongside the
+     dashboard itself rather than as a descendant of it. */
+  .dash-root,
+  .dash-root *,
+  .dash-root *::before,
+  .dash-root *::after,
+  [data-slot|="dropdown-menu"],
+  [data-slot|="dropdown-menu"] *,
+  [data-slot|="dropdown-menu"] *::before,
+  [data-slot|="dropdown-menu"] *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid var(--color-border);
+  }
+
+  .dash-root h1,
+  .dash-root h2,
+  .dash-root h3,
+  .dash-root h4 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .dash-root img,
+  .dash-root svg,
+  .dash-root canvas,
+  [data-slot|="dropdown-menu"] svg {
+    display: block;
+    vertical-align: middle;
+  }
+
+  .dash-root button,
+  .dash-root input,
+  .dash-root select,
+  .dash-root textarea,
+  [data-slot|="dropdown-menu"] button {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+  }
+
+  .dash-root button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Headings, figures and other "main things" carry their own font-bold /
+     font-extrabold classes per component; this is the source app's rule that
+     makes those specific elements read as heavy. */
+  .dash-root .font-bold,
+  .dash-root .font-extrabold,
+  .dash-root .font-black,
+  .dash-root strong,
+  .dash-root h1,
+  .dash-root h2,
+  .dash-root h3,
+  [data-slot|="dropdown-menu"] strong {
+    font-weight: 800;
+  }
+}
+
+/* Page frame: the scroll container the dashboard's height-based grid measures
+   itself against, and the wash the panels sit on. */
+.dash-root {
+  container-type: inline-size;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  background: #f5f8f6;
+  color: #000000;
+  font-size: 16px;
+  line-height: normal;
+  padding: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .dash-root {
+    padding: 1rem;
+  }
+}
